@@ -1,53 +1,83 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+namespace Assets.Scripts
 {
-	public Animator anim;
-	public float inputDelay=0.1f;
-	public float forwardVel=12;
-	public float rotateVel=100;
-	Quaternion targetRotation;
-	Rigidbody rBody;
-	float forwardInput, turnInput;
-	public Quaternion TargetRotation
+	public class PlayerController : MonoBehaviour
 	{
-		get { return targetRotation; }
-	}	
+		#region PublicFields
 
-	void Start ()
-	{	
-		targetRotation = transform.rotation;
-		rBody = GetComponent<Rigidbody> ();
-		forwardInput = turnInput = 0;
-		anim= GetComponent<Animator> ();
-	}
-	void GetInput(){
-		forwardInput = Input.GetAxis ("Vertical");
-		turnInput = Input.GetAxis ("Horizontal");
-	}
-	void Update ()
-	{
-		GetInput ();
-		Turn ();
-	}
-	void FixedUpdate ()
-	{
-		Run ();
-	}
-	void Run(){
-		if (Mathf.Abs (forwardInput) > inputDelay) {
-			//move
-			rBody.velocity = transform.forward * forwardInput * forwardVel;
-		} else
-			rBody.velocity = Vector3.zero;
-	}
-	void Turn(){
-		if (Mathf.Abs (turnInput) > inputDelay) {
-			targetRotation *= Quaternion.AngleAxis (rotateVel * turnInput * Time.deltaTime, Vector3.up);
+		public Quaternion TargetRotation { get; private set; }
+
+		public Animator anim;
+		public float inputDelay = 0.1f;
+		public float forwardVel = 12;
+		public float rotateVel = 100;
+
+		#endregion
+
+		#region PrivateFields
+
+		private Rigidbody rBody;
+
+		private float forwardInput,
+			turnInput;
+
+		#endregion
+
+		#region UnityMethods
+
+		private void Start()
+		{
+			TargetRotation = transform.rotation;
+			rBody = GetComponent<Rigidbody>();
+			forwardInput = turnInput = 0;
+			anim = GetComponent<Animator>();
 		}
-		transform.rotation = TargetRotation;
+
+		private void Update()
+		{
+			GetInput();
+			Turn();
+		}
+
+		private void FixedUpdate()
+		{
+			Run();
+		}
+
+		#endregion
+
+		#region PrivateMethods
+
+		private void GetInput()
+		{
+			forwardInput = Input.GetAxis("Vertical");
+			turnInput = Input.GetAxis("Horizontal");
+		}
+
+		private void Run()
+		{
+			if (Mathf.Abs(forwardInput) > inputDelay)
+			{
+				//move
+				rBody.velocity = transform.forward * forwardInput * forwardVel;
+			}
+			else
+			{
+				rBody.velocity = Vector3.zero;
+			}
+		}
+
+		private void Turn()
+		{
+			if (Mathf.Abs(turnInput) > inputDelay)
+			{
+				TargetRotation *= Quaternion.AngleAxis(rotateVel * turnInput * Time.deltaTime, Vector3.up);
+			}
+
+			transform.rotation = TargetRotation;
+		}
+
+		#endregion
 	}
 }
-

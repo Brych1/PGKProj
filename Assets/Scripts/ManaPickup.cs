@@ -1,32 +1,38 @@
 ﻿using UnityEngine;
+
 namespace Assets.Scripts
 {
-    [RequireComponent(typeof(BoxCollider))]
-    class ManaPickup : MonoBehaviour, IPickableObject
-    {
-        [SerializeField] private int _manaValue;
+	[RequireComponent(typeof(BoxCollider))]
+	internal class ManaPickup : MonoBehaviour, IPickableObject
+	{
+		#region SerializeFields
 
-        public int GetValue()
-        {
-            return _manaValue;
-        }
+		[SerializeField] private int _manaValue;
 
-        public void PickUp(AmmoPickup stats, PlayerStatsControll player)
-        {            
-        }
+		#endregion
 
-        public void PickUp(HealthPickup stats, PlayerStatsControll player)
-        {        
-        }
+		#region PublicMethods
 
-        public void PickUp(ManaPickup stats, PlayerStatsControll player)
-        {
-            player.Mana += _manaValue;
-            Destroy(gameObject);
-        }
+		public int GetValue()
+		{
+			return _manaValue;
+		}
 
-        public void PickUp(ImmortalPickup pickUp, PlayerStatsControll player)
-        {
-        }
-    }
+		public void PickUp(AmmoPickup stats, PlayerStatsControll player)
+		{ }
+
+		public void PickUp(HealthPickup stats, PlayerStatsControll player)
+		{ }
+
+		public void PickUp(ManaPickup stats, PlayerStatsControll player)
+		{
+			player.Mana += _manaValue;
+			Destroy(gameObject);
+		}
+
+		public void PickUp(ImmortalPickup pickUp, PlayerStatsControll player)
+		{ }
+
+		#endregion
+	}
 }

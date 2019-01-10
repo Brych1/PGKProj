@@ -1,44 +1,56 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using System;
+
 namespace Assets.Scripts
 {
-    class ImmortalPickup : MonoBehaviour, IPickableObject
-    {
-        private Scheduler _schedulerInstance;
-        [SerializeField] int _time;
-        Action a;
-        public int GetValue()
-        {
-            return _time;
-        }
+	internal class ImmortalPickup : MonoBehaviour, IPickableObject
+	{
+		#region SerializeFields
 
-        public void PickUp(AmmoPickup pickUp, PlayerStatsControll player)
-        {   
-        }
+		[SerializeField] private int _time;
 
-        public void PickUp(HealthPickup pickUp, PlayerStatsControll player)
-        {            
-        }
+		#endregion
 
-        public void PickUp(ManaPickup pickUp, PlayerStatsControll player)
-        {            
-        }
+		#region PrivateFields
 
-        public void PickUp(ImmortalPickup pickUp, PlayerStatsControll player)
-        {
-            player.Immortal = true;
-            a = () =>
-            {
-                player.Immortal = false;
-            };
-            _schedulerInstance.ScheduleParameter((float)_time, a);
-            Destroy(gameObject);
-        }
-        void Start()
-        {
-            _schedulerInstance = Scheduler.Instance;            
-        }
-    }
+		private CoroutineScheduler m_coroutineSchedulerInstance;
+		private Action a;
+
+		#endregion
+
+		#region UnityMethods
+
+		private void Start()
+		{
+			//_schedulerInstance = Scheduler.Instance;
+		}
+
+		#endregion
+
+		#region PublicMethods
+
+		public int GetValue()
+		{
+			return _time;
+		}
+
+		public void PickUp(AmmoPickup pickUp, PlayerStatsControll player)
+		{ }
+
+		public void PickUp(HealthPickup pickUp, PlayerStatsControll player)
+		{ }
+
+		public void PickUp(ManaPickup pickUp, PlayerStatsControll player)
+		{ }
+
+		public void PickUp(ImmortalPickup pickUp, PlayerStatsControll player)
+		{
+			player.Immortal = true;
+			a = () => { player.Immortal = false; };
+			m_coroutineSchedulerInstance.ScheduleParameter(_time, a);
+			Destroy(gameObject);
+		}
+
+		#endregion
+	}
 }
